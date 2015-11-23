@@ -16,6 +16,9 @@ class MoviesController < ApplicationController
     else
       @movies = Movie.all
     end
+  
+    @title_class = 'hilite' if params[:sort_by] == 'title'
+    @release_date_class = 'hilite' if params[:sort_by] == 'release_date'
   end
 
   def new
