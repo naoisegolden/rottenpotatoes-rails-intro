@@ -14,18 +14,20 @@ class MoviesController < ApplicationController
     @all_ratings = Movie.all_ratings
     @selected_ratings = @all_ratings
     @movies = Movie.all
+    session[:sort_by] = sort_by = params[:sort_by] || session[:sort_by]
+    session[:ratings] = ratings = params[:ratings] || session[:ratings]
   
-    if params[:sort_by]
-      @movies = Movie.order(params[:sort_by]).all
+    if ratings
+      @selected_ratings = ratings
+      @movies = Movie.where(rating: Array(ratings))
     end
   
-    @title_class = 'hilite' if params[:sort_by] == 'title'
-    @release_date_class = 'hilite' if params[:sort_by] == 'release_date'
-  
-    if params[:ratings]
-      @selected_ratings = params[:ratings]
-      @movies = Movie.where(rating: Array(params[:ratings]))
+    if sort_by
+      @movies = @movies.order(sort_by)
     end
+  
+    @title_class = 'hilite' if sort_by == 'title'
+    @release_date_class = 'hilite' if sort_by == 'release_date'
   end
 
   def new
