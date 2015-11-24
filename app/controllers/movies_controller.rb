@@ -11,23 +11,24 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.all_ratings
+    
     if params[:sort_by]
       session[:sort_by] = sort_by = params[:sort_by]
     else
-      sort_by = session[:sort_by]
+      sort_by = session[:sort_by] || 'title'
     end
     
     if params[:ratings]
       session[:ratings] = ratings = params[:ratings]
     else
-      ratings = session[:ratings]
+      ratings = session[:ratings] || @all_ratings
     end
     
     if !params[:sort_by] || !params[:ratings]
       redirect_to movies_path(ratings: ratings, sort_by: sort_by)
     end
     
-    @all_ratings = Movie.all_ratings
     @selected_ratings = @all_ratings
     @movies = Movie.all
   
